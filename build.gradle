@@ -36,7 +36,6 @@ dependencies {
             //assert
             "org.assertj:assertj-core:3.19.0",
             //allure
-//            "io.qameta.allure:allure-selenide:$allureVersion",
             "io.qameta.allure:allure-rest-assured:$allureVersion")
 }
 

@@ -3,7 +3,9 @@ package tests;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Owner;
+import io.restassured.response.Response;
 import models.Book;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,12 +20,12 @@ public class BookStoreTests {
     @Test
     @Owner("omelyashchik")
     @Feature("Api")
-    @DisplayName("Verify book's iban")
-    public void checkIban() {
+    @DisplayName("Verify book's isbn")
+    public void checkIsbn() {
         List<Book> books = steps.getBooks();
 
-        Allure.step("Check that response contains at least one book", () ->
-                assertThat(books.size()).as("Number of books").isGreaterThanOrEqualTo(1));
+        Allure.step("Check that response contains 8 book", () ->
+                assertThat(books.size()).as("Number of books").isEqualTo(8));
 
         Allure.step("Check that all books have a correct format of 'isbn'", () ->
                 books.forEach(book -> {
@@ -38,7 +40,7 @@ public class BookStoreTests {
     @Owner("omelyashchik")
     @Feature("Api")
     @DisplayName("Verify books")
-    public void checkShoppingCartApi() {
+    public void checkBooks() {
         List<Book> books = steps.getBooks();
 
         Allure.step("Check that all books can get from Book Store by 'isbn' and the information matches", () ->
@@ -49,5 +51,16 @@ public class BookStoreTests {
                         assertThat(actualBook).as("Book").isEqualTo(expectedBook);
                     });
                 }));
+    }
+
+    @Test
+    @Owner("omelyashchik")
+    @Feature("Api")
+    @DisplayName("Verify book's isbn (Groovy)")
+    public void checkIsbnGroovy() {
+        Response response = steps.getResponseWithBooks();
+        Allure.step("Check that all books have a correct format of 'isbn'", () ->
+                response.then()
+                        .body("books.findAll{it.isbn =~/^\\d{13}$/}.isbn.flatten()", Matchers.hasSize(8)));
     }
 }
