@@ -10,9 +10,6 @@ import static org.aeonbits.owner.Config.LoadType.MERGE;
         "classpath:config/test_data.properties"
 })
 public interface TestDataConfig extends Config {
-    @Key("web.url")
-    String webUrl();
-
     @Key("api.url")
     String apiUrl();
 }
